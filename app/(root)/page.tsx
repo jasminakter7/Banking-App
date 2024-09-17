@@ -4,7 +4,7 @@ import HeaderBox from '@/components/ui/HeaderBox'
 import React from 'react'
 
 const Home = () => {
-    const loggedIn = {firstName: 'Jasmin'}
+    const loggedIn = {firstName: 'Jasmin', lastName: 'Akter', email: 'jasmin.demo@gmail.com'}
   return (
     <section className="home">
         <div className="home-content">
@@ -29,7 +29,7 @@ const Home = () => {
         <RightSidebar
         user={loggedIn}
         transactions={[]}
-        banks={[]}
+        banks={[{}, {}]}
         />
     </section>
   )
