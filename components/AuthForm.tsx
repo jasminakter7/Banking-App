@@ -22,9 +22,12 @@ import {
 import { authFormSchema } from '@/lib/utils';
 import CustomInput from './CustomInput';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { signIn, signUp } from '@/lib/actions/user.action';
 
 
 const AuthForm = ({ type }: { type:string }) => {
+    const router = useRouter();
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -40,11 +43,32 @@ const AuthForm = ({ type }: { type:string }) => {
     })
     
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = async (data: z.infer<typeof formSchema>) =>{
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         setIsLoading(true);
-        console.log(values)
+       try {
+        if(type === 'sign-up'){
+            const newUser = await signUp(data);
+
+            setUser(newUser);
+        }
+
+        if(type === 'sign-in'){
+            const response = await signIn({
+                email: "",
+                password: ""
+            })
+
+            if(response) router.push('/')
+
+        }
+        
+       } catch (error) {
+        console.log(error);
+       } finally{
+
+       }
         setIsLoading(false);
     }
 
@@ -63,7 +87,8 @@ const AuthForm = ({ type }: { type:string }) => {
             </Link> 
             <div className="flex flex-col gap-1 md:gap-3">
                 <h1 className="text-24 lg:text-36 font-semibold text-gray-900">
-                    {user ? 'Link Account' : type === 'sign-in' ? 'Sign In' : 'Sign Up'
+                    {
+                        user ? 'Link Account' : type === 'sign-in' ? 'Sign In' : 'Sign Up'
                     }
                 </h1>
                 <p className="text-16 font-normal text-gray-600">
@@ -90,6 +115,7 @@ const AuthForm = ({ type }: { type:string }) => {
                                             <CustomInput control={form.control} name='lastName' label='Last Name' placeholder='Enter your last name'/>
                                         </div>
                                         <CustomInput control={form.control} name='address1' label='Address' placeholder='Enter your specific address'/>
+                                        <CustomInput control={form.control} name='city' label='City' placeholder='Enter your city'/>
                                         <div className="flex gap-4">
                                             <CustomInput control={form.control} name='state' label='State' placeholder='Example: NY'/> 
                                             <CustomInput control={form.control} name='postalCode' label='Postal Code' placeholder='Example: 11101'/> 
