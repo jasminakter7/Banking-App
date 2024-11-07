@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -52,15 +51,16 @@ const AuthForm = ({ type }: { type:string }) => {
             const newUser = await signUp(data);
 
             setUser(newUser);
+            console.log(user,"user")
         }
 
         if(type === 'sign-in'){
-            const response = await signIn({
-                email: "",
-                password: ""
-            })
+            // const response = await signIn({
+            //     email: "",
+            //     password: ""
+            // })
 
-            if(response) router.push('/')
+            // if(response) router.push('/')
 
         }
         
@@ -98,8 +98,11 @@ const AuthForm = ({ type }: { type:string }) => {
                 </p>
             </div>
         </header>
+        
         {
+            
             user ? (
+                
                 <div className="flex flex-col gap-4">
                     {/* {PlaidLink} */}
                 </div>
